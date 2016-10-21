@@ -110,5 +110,28 @@ RSpec.describe 'adapting structs into pg' do
         end
       end
     end
+
+    describe 'finding multiples' do
+      before do
+        3.times do |i|
+          table.insert(name: 'My Model', other: i)
+        end
+        3.times do |i|
+          table.insert(name: 'Other Model', other: i)
+        end
+      end
+
+      let(:result) { adaptor.find(name: 'My Model') }
+
+      it 'returns 3 models' do
+        expect(result.count).to eq 3
+      end
+      it 'translates all to klass' do
+        expect(result.all? { |k| k.is_a? klass }).to be true
+      end
+      it 'gets them all' do
+        expect(result.map(&:other)).to eq ['0', '1', '2']
+      end
+    end
   end
 end

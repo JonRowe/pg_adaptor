@@ -27,6 +27,10 @@ class PGAdaptor
     @table.where(selector).delete
   end
 
+  def find selector = {}
+    @table.where(selector).map { |row| build row }
+  end
+
 private
 
   def build result
