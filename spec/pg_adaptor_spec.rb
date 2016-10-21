@@ -59,5 +59,34 @@ RSpec.describe 'adapting structs into pg' do
         it_should_behave_like 'new model'
       end
     end
+
+    describe 'with an existing model' do
+      let(:model) { klass.new 'Test Model','Some Data',['Some Other Members'] }
+      let(:id)    { table.insert(name: 'My Model', other: 'Some Value', members: Sequel.pg_array(['Some Members'])) }
+
+      before do
+        model.id = id
+      end
+
+      shared_examples_for 'modifying an existing model' do
+        let(:data) { table.order(:id).last }
+
+        it 'doesnt change the number of items in the table' do
+          expect { perform }.to change { table.count }.by(0)
+        end
+        it 'sets my fields and values' do
+          perform
+          expect(data[:id]).to eq model.id
+          expect(data[:name]).to  eq 'Test Model'
+          expect(data[:other]).to eq 'Some Data'
+          expect(data[:members]).to eq ['Some Other Members']
+        end
+      end
+
+      describe 'to update it' do
+        let(:perform) { adaptor.update model }
+        it_should_behave_like 'modifying an existing model'
+      end
+    end
   end
 end

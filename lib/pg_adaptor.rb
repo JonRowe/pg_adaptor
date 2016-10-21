@@ -15,6 +15,10 @@ class PGAdaptor
     @table.insert process(model)
   end
 
+  def update model, query = { id: model.id }
+    @table.where(query).update process(model)
+  end
+
 private
 
   def process(model)
