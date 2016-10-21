@@ -16,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = PGAdaptor::VERSION
 
   gem.add_dependency 'pg'
+  gem.add_dependency 'sequel'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'

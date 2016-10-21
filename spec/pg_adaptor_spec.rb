@@ -1,6 +1,21 @@
 require 'pg_adaptor'
 
 RSpec.describe 'adapting structs into pg' do
+  let(:db) { Sequel.postgres 'pg_adaptor_test'  }
+
+  before do
+    PGAdaptor.db = db
+    db.create_table :test_table do
+      primary_key :id
+      String :name
+      String :other
+      String :members
+    end
+  end
+
+  after do
+    db.drop_table :test_table
+  end
 
   describe 'db setup' do
     it 'can be configured' do
