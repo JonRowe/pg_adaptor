@@ -87,6 +87,20 @@ RSpec.describe 'adapting structs into pg' do
         let(:perform) { adaptor.update model }
         it_should_behave_like 'modifying an existing model'
       end
+
+      describe 'to fetch it' do
+        let(:result) { adaptor.fetch(id: id) }
+
+        it "returns a class" do
+          expect(result).to be_a klass
+        end
+        specify "the classes fields are set correctly" do
+          expect(result.id).to      eq id
+          expect(result.name).to    eq 'My Model'
+          expect(result.other).to   eq 'Some Value'
+          expect(result.members).to eq ['Some Members']
+        end
+      end
     end
   end
 end

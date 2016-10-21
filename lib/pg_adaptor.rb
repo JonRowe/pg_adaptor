@@ -19,7 +19,17 @@ class PGAdaptor
     @table.where(query).update process(model)
   end
 
+  def fetch selector = {}, opts = {}
+    build @table.where(selector).first
+  end
+
 private
+
+  def build result
+    @klass.new.tap do |model|
+      result.each { |field,value| model[field] = value }
+    end
+  end
 
   def process(model)
     fields = {}
