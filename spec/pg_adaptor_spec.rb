@@ -58,6 +58,11 @@ RSpec.describe 'adapting structs into pg' do
         let(:perform) { adaptor.insert model }
         it_should_behave_like 'new model'
       end
+
+      context 'upserting' do
+        let(:perform) { adaptor.upsert model }
+        it_should_behave_like 'new model'
+      end
     end
 
     describe 'with an existing model' do
@@ -85,6 +90,11 @@ RSpec.describe 'adapting structs into pg' do
 
       describe 'to update it' do
         let(:perform) { adaptor.update model }
+        it_should_behave_like 'modifying an existing model'
+      end
+
+      describe 'to upsert it' do
+        let(:perform) { adaptor.upsert model }
         it_should_behave_like 'modifying an existing model'
       end
 

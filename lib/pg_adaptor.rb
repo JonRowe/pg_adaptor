@@ -15,6 +15,11 @@ class PGAdaptor
     @table.insert process(model)
   end
 
+  def upsert model, opts = { field: :id }
+    values = process model
+    @table.insert_conflict(target: opts[:field], update: values).insert values
+  end
+
   def update model, query = { id: model.id }
     @table.where(query).update process(model)
   end
