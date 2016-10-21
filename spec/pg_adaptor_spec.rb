@@ -101,6 +101,14 @@ RSpec.describe 'adapting structs into pg' do
           expect(result.members).to eq ['Some Members']
         end
       end
+
+      describe 'to remove it' do
+        it 'removes the record matching the selector' do
+          expect {
+            adaptor.remove(id: id)
+          }.to change { table.count }.to 0
+        end
+      end
     end
   end
 end

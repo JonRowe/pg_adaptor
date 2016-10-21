@@ -23,6 +23,10 @@ class PGAdaptor
     build @table.where(selector).first
   end
 
+  def remove selector = {}
+    @table.where(selector).delete
+  end
+
 private
 
   def build result
