@@ -5,11 +5,12 @@ RSpec.describe 'adapting structs into pg' do
 
   before do
     PGAdaptor.db = db
+    db.extension :pg_array
     db.create_table :test_table do
       primary_key :id
       String :name
       String :other
-      String :members
+      column :members, "text[]"
     end
   end
 
@@ -30,7 +31,7 @@ RSpec.describe 'adapting structs into pg' do
     let(:table)      { db[:test_table] }
 
     describe 'with a new model' do
-      let(:model) { klass.new 'Test Model','Some Data','Some Members','fake key'  }
+      let(:model) { klass.new 'Test Model','Some Data',['Some Members'],'fake key'  }
       let(:data)  { table.order(:id).last }
 
       shared_examples_for 'creates a record' do
@@ -49,7 +50,7 @@ RSpec.describe 'adapting structs into pg' do
           perform
           expect(data[:name]).to  eq 'Test Model'
           expect(data[:other]).to eq 'Some Data'
-          expect(data[:members]).to eq 'Some Members'
+          expect(data[:members]).to eq ['Some Members']
         end
       end
 

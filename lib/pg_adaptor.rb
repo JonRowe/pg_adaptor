@@ -19,7 +19,14 @@ private
 
   def process(model)
     fields = {}
-    model.each_pair { |field,value| fields[field] = value unless field == :id }
+    model.each_pair do |field,value|
+      next if field == :id
+      if Array === value
+        fields[field] = Sequel.pg_array value
+      else
+        fields[field] = value
+      end
+    end
     fields
   end
 
