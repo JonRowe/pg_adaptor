@@ -42,7 +42,7 @@ private
   def process(model)
     fields = {}
     model.each_pair do |field,value|
-      next if field == :id
+      next if field == :id && value.nil?
       if Array === value
         fields[field] = Sequel.pg_array value
       else

@@ -31,7 +31,7 @@ RSpec.describe 'adapting structs into pg' do
     let(:table)      { db[:test_table] }
 
     describe 'with a new model' do
-      let(:model) { klass.new 'Test Model','Some Data',['Some Members'],'fake key'  }
+      let(:model) { klass.new 'Test Model','Some Data',['Some Members']  }
       let(:data)  { table.order(:id).last }
 
       shared_examples_for 'creates a record' do
