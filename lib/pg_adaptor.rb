@@ -53,6 +53,7 @@ private
     fields = {}
     model.each_pair do |field,value|
       next if field == :id && value.nil?
+      raise "Field not present in schema: #{field}" unless schema[field]
       case schema[field][:db_type]
       when "jsonb"  then fields[field] = Sequel.pg_jsonb value
       when /\[\]$/  then fields[field] = Sequel.pg_array value
