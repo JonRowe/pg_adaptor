@@ -7,6 +7,7 @@ class PGAdaptor
   end
 
   def initialize name, klass
+    @name = name
     @table = self.class.db[name]
     @klass = klass
   end
@@ -46,7 +47,7 @@ private
 
   def process(model)
     schema = {}
-    self.class.db.schema(@table).each do |(key, info)|
+    self.class.db.schema(@name).each do |(key, info)|
       schema[key] = info
     end
     fields = {}
