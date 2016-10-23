@@ -45,11 +45,16 @@ private
   end
 
   def process(model)
+    schema = {}
+    self.class.db.schema(@table).each do |(key, info)|
+      schema[key] = info
+    end
     fields = {}
     model.each_pair do |field,value|
       next if field == :id && value.nil?
-      if Array === value
-        fields[field] = Sequel.pg_array value
+      case schema[field][:db_type]
+      when "jsonb"  then fields[field] = Sequel.pg_jsonb value
+      when /\[\]$/  then fields[field] = Sequel.pg_array value
       else
         fields[field] = value
       end

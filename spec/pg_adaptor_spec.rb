@@ -6,11 +6,13 @@ RSpec.describe 'adapting structs into pg' do
   before do
     PGAdaptor.db = db
     db.extension :pg_array
+    db.extension :pg_json
     db.create_table :test_table do
       primary_key :id
       String :name
       String :other
       column :members, "text[]"
+      column :info, "jsonb"
     end
   end
 
@@ -26,12 +28,12 @@ RSpec.describe 'adapting structs into pg' do
   end
 
   describe 'using the adaptor' do
-    let(:klass)      { Struct.new :name, :other, :members, :id }
+    let(:klass)      { Struct.new :name, :other, :members, :info, :id }
     let(:adaptor)    { PGAdaptor.new :test_table, klass }
     let(:table)      { db[:test_table] }
 
     describe 'with a new model' do
-      let(:model) { klass.new 'Test Model','Some Data',['Some Members']  }
+      let(:model) { klass.new 'Test Model','Some Data',['Some Members'],{ some: :info }  }
       let(:data)  { table.order(:id).last }
 
       shared_examples_for 'creates a record' do
@@ -51,6 +53,7 @@ RSpec.describe 'adapting structs into pg' do
           expect(data[:name]).to  eq 'Test Model'
           expect(data[:other]).to eq 'Some Data'
           expect(data[:members]).to eq ['Some Members']
+          expect(data[:info]).to eq "some" => "info"
         end
       end
 
@@ -66,9 +69,8 @@ RSpec.describe 'adapting structs into pg' do
     end
 
     describe 'with an existing model' do
-      let(:model) { klass.new 'Test Model','Some Data',['Some Other Members'] }
-      let(:id)    { table.insert(name: 'My Model', other: 'Some Value', members: Sequel.pg_array(['Some Members'])) }
-
+      let(:model) { klass.new 'Test Model','Some Data',['Some Other Members'], { some: :info } }
+      let(:id)    { table.insert(name: 'My Model', other: 'Some Value', members: Sequel.pg_array(['Some Members']), info: Sequel.pg_jsonb({other: :info})) }
       before do
         model.id = id
       end
@@ -85,6 +87,7 @@ RSpec.describe 'adapting structs into pg' do
           expect(data[:name]).to  eq 'Test Model'
           expect(data[:other]).to eq 'Some Data'
           expect(data[:members]).to eq ['Some Other Members']
+          expect(data[:info]).to eq "some" => "info"
         end
       end
 
