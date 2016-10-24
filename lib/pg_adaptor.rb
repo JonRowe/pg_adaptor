@@ -26,16 +26,16 @@ class PGAdaptor
     @table.where(query).update process(model)
   end
 
-  def fetch selector = {}, opts = {}
-    build @table.where(selector).first
+  def fetch selector = {}, *args
+    build @table.where(selector, *args).first
   end
 
   def remove selector = {}
     @table.where(selector).delete
   end
 
-  def find selector = {}
-    @table.where(selector).map { |row| build row }
+  def find selector = {}, *args
+    @table.where(selector, *args).map { |row| build row }
   end
 
 private
