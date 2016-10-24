@@ -45,11 +45,18 @@ private
     end
   end
 
+  def schema
+    @schema ||=
+      begin
+        schema = {}
+        self.class.db.schema(@name).each do |(key, info)|
+          schema[key] = info
+        end
+        schema
+      end
+  end
+
   def process(model)
-    schema = {}
-    self.class.db.schema(@name).each do |(key, info)|
-      schema[key] = info
-    end
     fields = {}
     model.each_pair do |field,value|
       next if field == :id && value.nil?
