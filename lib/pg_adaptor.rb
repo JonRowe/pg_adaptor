@@ -8,7 +8,7 @@ class PGAdaptor
 
   def initialize name, klass
     @name = name
-    @table = self.class.db[name]
+    @table = self.class.db[name.to_sym]
     @klass = klass
   end
 
