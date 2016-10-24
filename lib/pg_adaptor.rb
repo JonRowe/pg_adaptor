@@ -42,7 +42,9 @@ private
 
   def build result
     @klass.new.tap do |model|
-      result.each { |field,value| model[field] = value }
+      @klass.members.each do |field|
+        model[field] = result[field]
+      end
     end
   end
 

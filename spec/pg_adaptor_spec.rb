@@ -13,6 +13,7 @@ RSpec.describe 'adapting structs into pg' do
       String :other
       column :members, "text[]"
       column :info, "jsonb"
+      String :old_data # used to demo only fields specified inserted
     end
   end
 
