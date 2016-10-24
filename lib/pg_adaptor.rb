@@ -1,4 +1,5 @@
 require 'sequel'
+require 'json'
 require "pg_adaptor/version"
 
 class PGAdaptor
