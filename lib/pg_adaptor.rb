@@ -27,7 +27,7 @@ class PGAdaptor
   end
 
   def fetch selector = {}, *args
-    build @table.where(selector, *args).first
+    build @table.select(*fields).where(selector, *args).first
   end
 
   def remove selector = {}
@@ -35,7 +35,7 @@ class PGAdaptor
   end
 
   def find selector = {}, *args
-    @table.where(selector, *args).map { |row| build row }
+    @table.select(*fields).where(selector, *args).map { |row| build row }
   end
 
 private
@@ -47,6 +47,11 @@ private
         model[field] = result[field]
       end
     end
+  end
+
+  def fields
+    return Sequel.lit('*') if @klass.nil?
+    @klass.members.map(&:to_sym)
   end
 
   def schema
