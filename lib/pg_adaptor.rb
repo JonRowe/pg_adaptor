@@ -41,6 +41,7 @@ class PGAdaptor
 private
 
   def build result
+    return unless result
     @klass.new.tap do |model|
       @klass.members.each do |field|
         model[field] = result[field]
