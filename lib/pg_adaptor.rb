@@ -66,8 +66,9 @@ private
       next if field == :id && value.nil?
       raise "Field not present in schema: #{field}" unless schema[field.to_sym]
       case schema[field.to_sym][:db_type]
-      when "jsonb"  then fields[field] = Sequel.pg_jsonb value
-      when /\[\]$/  then fields[field] = Sequel.pg_array value
+      when "jsonb" then fields[field] = Sequel.pg_jsonb value
+      when "json"  then fields[field] = Sequel.pg_json value
+      when /\[\]$/ then fields[field] = Sequel.pg_array value
       else
         fields[field] = value
       end
