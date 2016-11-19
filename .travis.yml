@@ -1,6 +1,6 @@
 language: ruby
 rvm:
   - 2.3.2
-services: postgresqe
+services: postgresql
 before_script:
   - psql -c 'create database pg_adaptor_test;' -U postgres
