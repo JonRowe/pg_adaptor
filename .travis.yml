@@ -2,7 +2,9 @@ language: ruby
 rvm:
   - 2.3.2
 addons:
-  postgresql: "9.4"
+  postgresql: "9.5"
+dist: trusty
+sudo: required
 services: postgresql
 before_script:
   - psql -c 'create database pg_adaptor_test;' -U postgres
